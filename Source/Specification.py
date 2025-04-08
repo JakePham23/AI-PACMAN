@@ -133,7 +133,22 @@ PACMAN_UP = r"../Assets/effects/pacman_up.png"
 
 BLACK_BG = r"../Assets/effects/bg.png"
 
-MONSTER_LEFT_IMAGE = r"../Assets/effects/ghost left.png"
-MONSTER_RIGHT_IMAGE = r"../Assets/effects/ghost right.png"
-MONSTER_UP_IMAGE = r"../Assets/effects/ghost up.png"
-MONSTER_DOWN_IMAGE = r"../Assets/effects/ghost down.png"
+MONSTER_BLUE_LEFT_IMAGE = r"../Assets/effects/blue_ghost/ghost left.png"
+MONSTER_BLUE_RIGHT_IMAGE = r"../Assets/effects/blue_ghost/ghost right.png"
+MONSTER_BLUE_UP_IMAGE = r"../Assets/effects/blue_ghost/ghost up.png"
+MONSTER_BLUE_DOWN_IMAGE = r"../Assets/effects/blue_ghost/ghost down.png"
+
+MONSTER_ORANGE_LEFT_IMAGE = r"../Assets/effects/orange_ghost/ghost left.png"
+MONSTER_ORANGE_RIGHT_IMAGE = r"../Assets/effects/orange_ghost/ghost right.png"
+MONSTER_ORANGE_UP_IMAGE = r"../Assets/effects/orange_ghost/ghost up.png"
+MONSTER_ORANGE_DOWN_IMAGE = r"../Assets/effects/orange_ghost/ghost down.png"
+
+MONSTER_PINK_LEFT_IMAGE = r"../Assets/effects/pink_ghost/ghost left.png"
+MONSTER_PINK_RIGHT_IMAGE = r"../Assets/effects/pink_ghost/ghost right.png"
+MONSTER_PINK_UP_IMAGE = r"../Assets/effects/pink_ghost/ghost up.png"
+MONSTER_PINK_DOWN_IMAGE = r"../Assets/effects/pink_ghost/ghost down.png"
+
+MONSTER_RED_LEFT_IMAGE = r"../Assets/effects/red_ghost/ghost left.png"
+MONSTER_RED_RIGHT_IMAGE = r"../Assets/effects/red_ghost/ghost right.png"
+MONSTER_RED_UP_IMAGE = r"../Assets/effects/red_ghost/ghost up.png"
+MONSTER_RED_DOWN_IMAGE = r"../Assets/effects/red_ghost/ghost down.png"

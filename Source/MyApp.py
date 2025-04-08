@@ -87,7 +87,7 @@ class MyApp:
         pacman = Pacman.Pacman(self, pacman_pos)
         pacman.appear()
 
-        monster = Monster.Monster(self, monster_pos)
+        monster = Monster.Monster(self, monster_pos, "blue")
         monster.appear()
 
         # food = Food.Food(self, monster_pos)
@@ -119,7 +119,7 @@ class MyApp:
 
     def level_3(self):
         """
-        Level 1: Pac-man keep position fixed. Orange gost using UCS algorithms to chase Pacman.
+        Level 3: Pac-man keep position fixed. Orange gost using UCS algorithms to chase Pacman.
         """
         graph_map, pacman_pos, monster_pos = Map.read_map_level_1_monster(
             MAP_INPUT_TXT[self.current_level - 1][self.current_map_index])
@@ -130,7 +130,7 @@ class MyApp:
         pacman = Pacman.Pacman(self, pacman_pos)
         pacman.appear()
 
-        monster = Monster.Monster(self, monster_pos)
+        monster = Monster.Monster(self, monster_pos, "orange")
         monster.appear()
 
         # food = Food.Food(self, monster_pos)

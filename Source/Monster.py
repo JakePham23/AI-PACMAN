@@ -4,25 +4,58 @@ import Food
 
 class Monster:
     ################################################## CORE FUNCTIONS ##################################################
-    def __init__(self, app, pos, cell=None):
+    def __init__(self, app, pos, color="blue", cell=None):
         self.app = app
         self.width = CELL_SIZE - 2
         self.grid_pos = [pos[0], pos[1]]
         self.pixel_pos = self.get_current_pixel_pos()
         self.direction = 'up'
-
-        self.monster_left_image = pygame.image.load(MONSTER_LEFT_IMAGE)
-        self.monster_left_image = pygame.transform.scale(self.monster_left_image, (self.width, self.width))
-        self.monster_right_image = pygame.image.load(MONSTER_RIGHT_IMAGE)
-        self.monster_right_image = pygame.transform.scale(self.monster_right_image, (self.width, self.width))
-        self.monster_up_image = pygame.image.load(MONSTER_UP_IMAGE)
-        self.monster_up_image = pygame.transform.scale(self.monster_up_image, (self.width, self.width))
-        self.monster_down_image = pygame.image.load(MONSTER_DOWN_IMAGE)
-        self.monster_down_image = pygame.transform.scale(self.monster_down_image, (self.width, self.width))
+        self.color = color
+        
+        # Gọi function để set màu cho con ma
+        self.set_monster_images(color)
+        
         self.black_background = pygame.image.load(BLACK_BG)
         self.black_background = pygame.transform.scale(self.black_background, (CELL_SIZE, CELL_SIZE))
         self.initial_cell = cell
         self.cell = cell
+    
+    def set_monster_images(self, color):
+        """Set monster images based on color parameter"""
+        if color == "blue":
+            left_img = MONSTER_BLUE_LEFT_IMAGE
+            right_img = MONSTER_BLUE_RIGHT_IMAGE
+            up_img = MONSTER_BLUE_UP_IMAGE
+            down_img = MONSTER_BLUE_DOWN_IMAGE
+        elif color == "red":
+            left_img = MONSTER_RED_LEFT_IMAGE
+            right_img = MONSTER_RED_RIGHT_IMAGE
+            up_img = MONSTER_RED_UP_IMAGE
+            down_img = MONSTER_RED_DOWN_IMAGE
+        elif color == "pink":
+            left_img = MONSTER_PINK_LEFT_IMAGE
+            right_img = MONSTER_PINK_RIGHT_IMAGE
+            up_img = MONSTER_PINK_UP_IMAGE
+            down_img = MONSTER_PINK_DOWN_IMAGE
+        elif color == "orange":
+            left_img = MONSTER_ORANGE_LEFT_IMAGE
+            right_img = MONSTER_ORANGE_RIGHT_IMAGE
+            up_img = MONSTER_ORANGE_UP_IMAGE
+            down_img = MONSTER_ORANGE_DOWN_IMAGE
+        else:
+            left_img = MONSTER_BLUE_LEFT_IMAGE
+            right_img = MONSTER_BLUE_RIGHT_IMAGE
+            up_img = MONSTER_BLUE_UP_IMAGE
+            down_img = MONSTER_BLUE_DOWN_IMAGE
+        
+        self.monster_left_image = pygame.image.load(left_img)
+        self.monster_left_image = pygame.transform.scale(self.monster_left_image, (self.width, self.width))
+        self.monster_right_image = pygame.image.load(right_img)
+        self.monster_right_image = pygame.transform.scale(self.monster_right_image, (self.width, self.width))
+        self.monster_up_image = pygame.image.load(up_img)
+        self.monster_up_image = pygame.transform.scale(self.monster_up_image, (self.width, self.width))
+        self.monster_down_image = pygame.image.load(down_img)
+        self.monster_down_image = pygame.transform.scale(self.monster_down_image, (self.width, self.width))
 
 
     def appear(self):
