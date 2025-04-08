@@ -8,6 +8,7 @@ import Map
 
 from Specification import *
 import BFS
+import UCS
 
 
 class MyApp:
@@ -80,8 +81,51 @@ class MyApp:
         
 
         # path = GraphSearchAStar.search(graph_map, pacman_pos, monster_pos)
-        path = BFS.bfs(graph_map, monster_pos, pacman_pos)
+        path = UCS.ucs(graph_map, monster_pos, pacman_pos)
 
+
+        pacman = Pacman.Pacman(self, pacman_pos)
+        pacman.appear()
+
+        monster = Monster.Monster(self, monster_pos)
+        monster.appear()
+
+        # food = Food.Food(self, monster_pos)
+        # food.appear()
+
+        if self.ready():
+            if path is not None:
+                back_home = False
+                goal = path[-1]
+                path = path[1:-1]
+
+                for cell in path:
+                    monster.move(cell)
+                    self.update_score(SCORE_PENALTY)
+                    pygame.time.delay(int(SPEED // self.speed_list[self.cur_speed_index][1]))
+
+                    if self.launch_game_event():
+                        back_home = True
+                        break
+
+                if not back_home:
+                    monster.move(goal)
+                    self.update_score(SCORE_PENALTY + SCORE_BONUS)
+                    self.state = STATE_GAMEOVER
+                    pygame.time.delay(2000)
+            else:
+                self.state = STATE_VICTORY
+                pygame.time.delay(2000)
+
+    def level_3(self):
+        """
+        Level 1: Pac-man keep position fixed. Orange gost using UCS algorithms to chase Pacman.
+        """
+        graph_map, pacman_pos, monster_pos = Map.read_map_level_1_monster(
+            MAP_INPUT_TXT[self.current_level - 1][self.current_map_index])
+        
+        # path = GraphSearchAStar.search(graph_map, pacman_pos, monster_pos)
+        path = UCS.ucs(graph_map, monster_pos, pacman_pos)
 
         pacman = Pacman.Pacman(self, pacman_pos)
         pacman.appear()
@@ -469,7 +513,6 @@ class MyApp:
             self.draw_triangle_button(self.screen, TRIANGLE_2_POS, LIGHT_GREY)
         pygame.display.update()
 
-
     @staticmethod
     def play_event():
         for event in pygame.event.get():
@@ -477,7 +520,6 @@ class MyApp:
                 pygame.quit()
                 sys.exit()
         pygame.display.update()
-
 
     def about_event(self):
         for event in pygame.event.get():
@@ -494,7 +536,6 @@ class MyApp:
         else:
             self.draw_button(self.screen, BACK_POS, LIGHT_GREY, BLACK, "Back")
         pygame.display.update()
-
 
     def level_event(self):
         for event in pygame.event.get():

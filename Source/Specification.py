@@ -119,6 +119,7 @@ RED = (255, 0, 0)
 TOMATO = (255, 99, 71)
 GREEN = (0, 255, 0)
 YELLOW = (255, 255, 0)
+ORANGE = (255, 165, 0)
 
 
 # Pacman, Food, Monster animations
