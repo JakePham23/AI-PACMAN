@@ -47,12 +47,15 @@ EXIT_POS = pygame.Rect(150, 565, 300, 50)
 
 
 # Level screen
-LEVEL_1_POS = pygame.Rect(150, 320, 300, 50)
-LEVEL_2_POS = pygame.Rect(150, 390, 300, 50)
-LEVEL_3_POS = pygame.Rect(150, 460, 300, 50)
-LEVEL_4_POS = pygame.Rect(150, 530, 300, 50)
-LEVEL_5_POS = pygame.Rect(150, 600, 300, 50)
-BACK_LEVEL_POS = pygame.Rect(500, 600, 70, 50)
+LEVEL_1_POS = (150, 280, 300, 40)
+LEVEL_2_POS = (150, 340, 300, 40)
+LEVEL_3_POS = (150, 400, 300, 40)
+LEVEL_4_POS = (150, 460, 300, 40)
+LEVEL_5_POS = (150, 520, 300, 40)
+LEVEL_6_POS = (150, 580, 300, 40)
+BACK_LEVEL_POS = (500, 580, 70, 40)
+  
+
 
 
 # About screen
