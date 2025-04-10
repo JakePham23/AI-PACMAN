@@ -5,10 +5,11 @@ import Pacman
 import Food
 import Monster
 import Map
-
 from Specification import *
 import BFS
 import UCS
+import AStar
+
 
 
 class MyApp:
@@ -159,6 +160,47 @@ class MyApp:
             else:
                 self.state = STATE_VICTORY
                 pygame.time.delay(2000)
+
+    def level_4(self):
+        """
+        Level 4: Pac-man keep position fixed. Red ghost using A* algorithm to chase Pacman.
+        """
+        graph_map, pacman_pos, monster_pos = Map.read_map_level_1_monster(
+            MAP_INPUT_TXT[self.current_level - 1][self.current_map_index])
+        
+        # Sử dụng thuật toán A*
+        path = AStar.astar(graph_map, monster_pos, pacman_pos)
+
+        pacman = Pacman.Pacman(self, pacman_pos)
+        pacman.appear()
+
+        monster = Monster.Monster(self, monster_pos, "red")
+        monster.appear()
+
+        if self.ready():
+            if path is not None:
+                back_home = False
+                goal = path[-1]
+                path = path[1:-1]
+
+                for cell in path:
+                    monster.move(cell)
+                    self.update_score(SCORE_PENALTY)
+                    pygame.time.delay(int(SPEED // self.speed_list[self.cur_speed_index][1]))
+
+                    if self.launch_game_event():
+                        back_home = True
+                        break
+
+                if not back_home:
+                    monster.move(goal)
+                    self.update_score(SCORE_PENALTY + SCORE_BONUS)
+                    self.state = STATE_GAMEOVER
+                    pygame.time.delay(2000)
+            else:
+                self.state = STATE_VICTORY
+                pygame.time.delay(2000)
+
 
     def level_5(self):
         """
