@@ -160,6 +160,72 @@ class MyApp:
                 self.state = STATE_VICTORY
                 pygame.time.delay(2000)
 
+    def level_5(self):
+        """
+        Level 5: Pac-man keep position fixed. 4 ghosts using BFS, DFS, UCS, A* algorithms to chase Pacman.
+        """
+        graph_map, pacman_pos, monster_pos_blue, monster_pos_orange, monster_pos_pink, monster_pos_red = Map.read_map_level_5_monster(
+            MAP_INPUT_TXT[self.current_level - 1][self.current_map_index])
+        
+        # path = GraphSearchAStar.search(graph_map, pacman_pos, monster_pos)
+        path_blue = BFS.bfs(graph_map, monster_pos_blue, pacman_pos)
+        path_orange = UCS.ucs(graph_map, monster_pos_orange, pacman_pos)
+        path_pink = BFS.bfs(graph_map, monster_pos_pink, pacman_pos)
+        path_red = UCS.ucs(graph_map, monster_pos_red, pacman_pos)
+        
+        pacman = Pacman.Pacman(self, pacman_pos)
+        pacman.appear()
+
+        blue_monster = Monster.Monster(self, monster_pos_blue, "blue")
+        blue_monster.appear()
+
+        orange_monster = Monster.Monster(self, monster_pos_orange, "orange")
+        orange_monster.appear()
+
+        pink_monster = Monster.Monster(self, monster_pos_pink, "pink")
+        pink_monster.appear()
+
+        red_monster = Monster.Monster(self, monster_pos_red, "red")
+        red_monster.appear()
+
+        # food = Food.Food(self, monster_pos)
+        # food.appear()
+
+        if self.ready():
+            if path_blue and path_orange and path_pink and path_red:
+                min_path = min(len(path_blue), len(path_orange), len(path_pink), len(path_red))
+                goal = path_red[-1]
+                back_home = False
+                for i in range(min_path):
+
+                    blue_monster.move(path_blue[i])
+                    orange_monster.move(path_orange[i])
+                    pink_monster.move(path_pink[i])
+                    red_monster.move(path_red[i])
+
+                    self.update_score(SCORE_PENALTY)
+                    pygame.time.delay(int(SPEED // self.speed_list[self.cur_speed_index][1]))
+
+                    if self.launch_game_event():
+                        back_home = True
+                        break
+
+                if not back_home:
+                    if len(path_blue) == min_path:
+                        blue_monster.move(goal)
+                    elif len(path_orange) == min_path:
+                        orange_monster.move(goal)
+                    elif len(path_pink) == min_path:
+                        pink_monster.move(goal)
+                    elif len(path_red) == min_path:
+                        red_monster.move(goal)
+
+                    self.update_score(SCORE_PENALTY + SCORE_BONUS)
+                    self.state = STATE_GAMEOVER
+                    pygame.time.delay(2000)
+            else:
+                self.state = STATE_VICTORY
+                pygame.time.delay(2000)
 
     def run(self):
         """
