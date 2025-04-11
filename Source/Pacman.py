@@ -41,6 +41,41 @@ class Pacman:
         """
         self.draw()
 
+    def try_move(self, direction, graph_map):
+        """
+        Cố gắng di chuyển Pac-Man theo hướng được chỉ định.
+        Trước khi chuyển, xóa Pac-Man ở vị trí cũ.
+        """
+        dx, dy = 0, 0
+        if direction == 'up':
+            dy = -1
+        elif direction == 'down':
+            dy = 1
+        elif direction == 'left':
+            dx = -1
+        elif direction == 'right':
+            dx = 1
+
+        # Tính vị trí ô mới (chuyển thành tuple)
+        new_grid_pos = (self.grid_pos[0] + dx, self.grid_pos[1] + dy)
+
+        # Kiểm tra xem ô mới có hợp lệ (không phải là tường) không
+        if new_grid_pos in graph_map:
+            # Xóa Pac-Man ở vị trí cũ bằng cách vẽ lại nền tại ô đó.
+            # Nếu self.app.background không tồn tại, thay thế bằng self.black_background.
+            try:
+                self.app.screen.blit(self.app.background, (self.pixel_pos[0], self.pixel_pos[1]))
+            except AttributeError:
+                self.app.screen.blit(self.black_background, (self.pixel_pos[0], self.pixel_pos[1]))
+            pygame.display.update()  # cập nhật vùng thay đổi nếu cần
+
+            # Sau đó cập nhật vị trí của Pac-Man
+            self.grid_pos = list(new_grid_pos)
+            self.direction = direction
+            self.pixel_pos = self.get_current_pixel_pos()
+            self.draw()  # Vẽ Pac-Man ở vị trí mới
+        else:
+            print(f"Di chuyển {direction} đến ô {new_grid_pos} không hợp lệ!")
 
     def move(self, new_grid_pos):
         """

@@ -128,3 +128,4 @@ def read_map_level_5_monster(map_input_path):
         pacman_pos = (round((min_x + max_x)/2)-3, round((min_y + max_y)/2)-2)
 
     return graph_map, pacman_pos, monster_pos_blue, monster_pos_orange, monster_pos_pink, monster_pos_red
+

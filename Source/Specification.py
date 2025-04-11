@@ -12,11 +12,13 @@ MAP_IMG = [r"../Assets/maps/map_1.png",
            r"../Assets/maps/map_2.png",
            r"../Assets/maps/map_3.png",
            r"../Assets/maps/map_4.png",
+           r"../Assets/maps/map_5.png",
            r"../Assets/maps/map_5.png"]
 MAP_INPUT_TXT = [[r"../Assets/levels/level_1/map_1.txt", r"../Assets/levels/level_1/map_2.txt", r"../Assets/levels/level_1/map_3.txt", r"../Assets/levels/level_1/map_4.txt", r"../Assets/levels/level_1/map_5.txt"],
                  [r"../Assets/levels/level_2/map_1.txt", r"../Assets/levels/level_2/map_2.txt", r"../Assets/levels/level_2/map_3.txt", r"../Assets/levels/level_2/map_4.txt", r"../Assets/levels/level_2/map_5.txt"],
                  [r"../Assets/levels/level_3/map_1.txt", r"../Assets/levels/level_3/map_2.txt", r"../Assets/levels/level_3/map_3.txt", r"../Assets/levels/level_3/map_4.txt", r"../Assets/levels/level_3/map_5.txt"],
                  [r"../Assets/levels/level_4/map_1.txt", r"../Assets/levels/level_4/map_2.txt", r"../Assets/levels/level_4/map_3.txt", r"../Assets/levels/level_4/map_4.txt", r"../Assets/levels/level_4/map_5.txt"],
+                 [r"../Assets/levels/level_5/map_1.txt", r"../Assets/levels/level_5/map_2.txt", r"../Assets/levels/level_5/map_3.txt", r"../Assets/levels/level_5/map_4.txt", r"../Assets/levels/level_5/map_5.txt"],
                  [r"../Assets/levels/level_5/map_1.txt", r"../Assets/levels/level_5/map_2.txt", r"../Assets/levels/level_5/map_3.txt", r"../Assets/levels/level_5/map_4.txt", r"../Assets/levels/level_5/map_5.txt"]]
 MAP_NUM = len(MAP_IMG)
 

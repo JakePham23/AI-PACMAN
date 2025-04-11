@@ -7,6 +7,7 @@ import Monster
 import Map
 from Specification import *
 import BFS
+import DFS
 import UCS
 import AStar
 
@@ -74,8 +75,8 @@ class MyApp:
             self.level_4()
         elif self.current_level == 5:
             self.level_5()
-        # elif self.current_level == 6:
-        #     self.level_6()
+        elif self.current_level == 6:
+            self.level_6()
 
     def level_1(self):
         """
@@ -86,7 +87,7 @@ class MyApp:
         
 
         # path = GraphSearchAStar.search(graph_map, pacman_pos, monster_pos)
-        path = UCS.ucs(graph_map, monster_pos, pacman_pos)
+        path = BFS.bfs(graph_map, monster_pos, pacman_pos)
 
 
         pacman = Pacman.Pacman(self, pacman_pos)
@@ -98,6 +99,48 @@ class MyApp:
         # food = Food.Food(self, monster_pos)
         # food.appear()
 
+        if self.ready():
+            if path is not None:
+                back_home = False
+                goal = path[-1]
+                path = path[1:-1]
+
+                for cell in path:
+                    monster.move(cell)
+                    self.update_score(SCORE_PENALTY)
+                    pygame.time.delay(int(SPEED // self.speed_list[self.cur_speed_index][1]))
+
+                    if self.launch_game_event():
+                        back_home = True
+                        break
+
+                if not back_home:
+                    monster.move(goal)
+                    self.update_score(SCORE_PENALTY + SCORE_BONUS)
+                    self.state = STATE_GAMEOVER
+                    pygame.time.delay(2000)
+            else:
+                self.state = STATE_VICTORY
+                pygame.time.delay(2000)
+    def level_2(self):
+        """
+        Level 2: Pac-man keep position fixed. Pink ghost using DFS algorithms to chase Pacman.
+        """
+        # Đọc bản đồ và vị trí của Pacman và Monster
+        graph_map, pacman_pos, monster_pos = Map.read_map_level_1_monster(
+            MAP_INPUT_TXT[self.current_level - 1][self.current_map_index])
+
+        # Sử dụng DFS để tìm đường đi của monster (thay vì UCS)
+        path = DFS.dfs(graph_map, monster_pos, pacman_pos)
+
+        pacman = Pacman.Pacman(self, pacman_pos)
+        pacman.appear()
+
+        # Tạo đối tượng monster màu hồng
+        monster = Monster.Monster(self, monster_pos, "pink")
+        monster.appear()
+
+        # Thực hiện nếu Pacman sẵn sàng
         if self.ready():
             if path is not None:
                 back_home = False
@@ -212,11 +255,14 @@ class MyApp:
         """
         graph_map, pacman_pos, monster_pos_blue, monster_pos_orange, monster_pos_pink, monster_pos_red = Map.read_map_level_5_monster(
             MAP_INPUT_TXT[self.current_level - 1][self.current_map_index])
-        
+        print("Current level:", self.current_level)
+        print("Current map index:", self.current_map_index)
+        print("Number of levels in MAP_INPUT_TXT:", len(MAP_INPUT_TXT))
+        print("Number of maps in current level:", len(MAP_INPUT_TXT[self.current_level - 1]))
         # path = GraphSearchAStar.search(graph_map, pacman_pos, monster_pos)
         path_blue = BFS.bfs(graph_map, monster_pos_blue, pacman_pos)
         path_orange = UCS.ucs(graph_map, monster_pos_orange, pacman_pos)
-        path_pink = BFS.bfs(graph_map, monster_pos_pink, pacman_pos)
+        path_pink = DFS.dfs(graph_map, monster_pos_pink, pacman_pos)
         path_red = UCS.ucs(graph_map, monster_pos_red, pacman_pos)
         
         pacman = Pacman.Pacman(self, pacman_pos)
@@ -272,6 +318,117 @@ class MyApp:
             else:
                 self.state = STATE_VICTORY
                 pygame.time.delay(2000)
+    def level_6(self):
+      
+        graph_map, pacman_pos, monster_pos_blue, monster_pos_orange, monster_pos_pink, monster_pos_red = \
+            Map.read_map_level_5_monster(MAP_INPUT_TXT[self.current_level - 2][self.current_map_index])
+      
+        
+        # Tạo và hiển thị Pac-Man
+        pacman = Pacman.Pacman(self, pacman_pos)
+        pacman.appear()
+        
+        # Tạo và hiển thị 4 ghost theo vị trí và màu sắc xác định
+        blue_monster = Monster.Monster(self, monster_pos_blue, "blue")
+        blue_monster.appear()
+        
+        orange_monster = Monster.Monster(self, monster_pos_orange, "orange")
+        orange_monster.appear()
+        
+        pink_monster = Monster.Monster(self, monster_pos_pink, "pink")
+        pink_monster.appear()
+        
+        red_monster = Monster.Monster(self, monster_pos_red, "red")
+        red_monster.appear()
+        
+        # Thiết lập một số biến để kiểm soát tốc độ và cache DFS của ghost Pink
+        clock = pygame.time.Clock()
+        game_over = False
+        
+        if self.ready():
+            while not game_over:
+                clock.tick(5) 
+                
+                # Xử lý sự kiện, bao gồm điều khiển Pac-Man
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        sys.exit()
+                    elif event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_UP:
+                            pacman.try_move('up', graph_map)
+                        elif event.key == pygame.K_DOWN:
+                            pacman.try_move('down', graph_map)
+                        elif event.key == pygame.K_LEFT:
+                            pacman.try_move('left', graph_map)
+                        elif event.key == pygame.K_RIGHT:
+                            pacman.try_move('right', graph_map)
+                
+                # --- Ghost Blue dùng BFS ---
+                path_blue = BFS.bfs(graph_map, tuple(blue_monster.grid_pos), tuple(pacman.grid_pos))
+                if path_blue is not None and len(path_blue) > 1:
+                    blue_monster.move(path_blue[1])
+                
+                    
+                # --- Ghost Pink dùng DFS ---
+                path_pink = DFS.dfs(graph_map, tuple(pink_monster.grid_pos), tuple(pacman.grid_pos))
+                if path_pink is not None and len(path_pink) > 1:
+                    next_step = path_pink[1]
+                    # Kiểm tra nếu bước kế tiếp trùng với vị trí ghost vừa rời (oscillation)
+                    if hasattr(pink_monster, "last_position") and next_step == pink_monster.last_position:
+                        # Nếu có các lựa chọn khác ở các ô kề, hãy chọn ô nào có khoảng cách Manhattan nhỏ hơn đến Pac-Man.
+                        current = tuple(pink_monster.grid_pos)
+                        candidates = graph_map.get(current, [])
+                        pac_x, pac_y = tuple(pacman.grid_pos)
+                        best = None
+                        best_dist = float("inf")
+                        for cand in candidates:
+                            if cand == pink_monster.last_position:
+                                continue
+                            # Tính khoảng cách Manhattan
+                            dist = abs(cand[0] - pac_x) + abs(cand[1] - pac_y)
+                            if dist < best_dist:
+                                best = cand
+                                best_dist = dist
+                        if best is not None:
+                            next_step = best
+                    else:
+                        # Nếu không có thuộc tính last_position, gán nó lần đầu
+                        pink_monster.last_position = None
+                    pink_monster.last_position = tuple(pink_monster.grid_pos)
+                    pink_monster.move(next_step)
+                
+                # --- Ghost Orange dùng UCS ---
+                path_orange = UCS.ucs(graph_map, tuple(orange_monster.grid_pos), tuple(pacman.grid_pos))
+                if path_orange is not None and len(path_orange) > 1:
+                    orange_monster.move(path_orange[1])
+                
+                # --- Ghost Red dùng A* ---
+                path_red = AStar.astar(graph_map, tuple(red_monster.grid_pos), tuple(pacman.grid_pos))
+                if path_red is not None and len(path_red) > 1:
+                    red_monster.move(path_red[1])
+                
+                # Kiểm tra va chạm giữa ghost và Pac-Man
+                for ghost in [blue_monster, pink_monster, orange_monster, red_monster]:
+                    if tuple(ghost.grid_pos) == tuple(pacman.grid_pos):
+                        print("DEBUG: Pac-Man bị bắt!")
+                        self.state = STATE_GAMEOVER
+
+                        # Hiển thị thông báo GAME OVER trên màn hình
+                        font = pygame.font.SysFont("Arial", 36)
+                        game_over_text = font.render("GAME OVER", True, (255, 0, 0))
+                        self.screen.blit(game_over_text, ((APP_WIDTH - game_over_text.get_width()) // 2,
+                                                        (APP_HEIGHT - game_over_text.get_height()) // 2))
+                        pygame.display.update()
+                        pygame.time.delay(2000)
+                        game_over = True
+                        break
+                
+                self.update_score(SCORE_PENALTY)
+                pygame.display.update()
+                pygame.time.delay(int(SPEED // self.speed_list[self.cur_speed_index][1]))
+
+
 
     def run(self):
         """
