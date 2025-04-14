@@ -263,7 +263,7 @@ class MyApp:
         path_blue = BFS.bfs(graph_map, monster_pos_blue, pacman_pos)
         path_orange = UCS.ucs(graph_map, monster_pos_orange, pacman_pos)
         path_pink = DFS.dfs(graph_map, monster_pos_pink, pacman_pos)
-        path_red = UCS.ucs(graph_map, monster_pos_red, pacman_pos)
+        path_red = AStar.astar(graph_map, monster_pos_red, pacman_pos)
         
         pacman = Pacman.Pacman(self, pacman_pos)
         pacman.appear()
