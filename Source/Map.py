@@ -23,7 +23,6 @@ def input_raw_2(map_input_path, random_pacman=True):
 
     pacman_pos = [int(x) for x in next(f).split()]
     raw_map = [[int(num) for num in line if num != '\n'] for line in f]
-    print("Pacman position1: ", pacman_pos)
 
     if random_pacman:
         valid_positions = [(x, y) for y in range(len(raw_map))
@@ -33,7 +32,6 @@ def input_raw_2(map_input_path, random_pacman=True):
     else:
         pacman_pos = (pacman_pos[0], pacman_pos[1])  # chuyển list thành tuple nếu không random
 
-    print("Pacman position2: ", pacman_pos)
 
     return pacman_pos, raw_map
 

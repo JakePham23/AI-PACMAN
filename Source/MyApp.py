@@ -10,7 +10,8 @@ import BFS
 import DFS
 import UCS
 import AStar
-
+import time
+import tracemalloc
 
 
 class MyApp:
@@ -78,39 +79,98 @@ class MyApp:
         elif self.current_level == 6:
             self.level_6()
 
+    # def level_1(self):
+    #     """
+    #     Level 1: Pac-man keep position fixed. Blue gost using BFS algorithms to chase Pacman.
+    #     """
+    #     graph_map, pacman_pos, monster_pos = Map.read_map_level_1_monster(
+    #         MAP_INPUT_TXT[self.current_level - 1][self.current_map_index])
+        
+
+    #     # path = GraphSearchAStar.search(graph_map, pacman_pos, monster_pos)
+    #     path = BFS.bfs(graph_map, monster_pos, pacman_pos)
+
+
+    #     pacman = Pacman.Pacman(self, pacman_pos)
+    #     pacman.appear()
+
+    #     monster = Monster.Monster(self, monster_pos, "blue")
+    #     monster.appear()
+
+    #     # food = Food.Food(self, monster_pos)
+    #     # food.appear()
+
+    #     start_time = time.time()
+    #     if self.ready():
+    #         if path is not None:
+    #             back_home = False
+    #             goal = path[-1]
+    #             path = path[1:-1]
+
+    #             for cell in path:
+    #                 monster.move(cell)
+    #                 self.update_score(SCORE_PENALTY)
+    #                 pygame.time.delay(int(SPEED // self.speed_list[self.cur_speed_index][1]))
+
+    #                 if self.launch_game_event():
+    #                     back_home = True
+    #                     break
+
+    #             if not back_home:
+    #                 monster.move(goal)
+    #                 self.update_score(SCORE_PENALTY + SCORE_BONUS)
+    #                 self.state = STATE_GAMEOVER
+    #                 pygame.time.delay(2000)
+    #         else:
+    #             self.state = STATE_VICTORY
+    #             pygame.time.delay(2000)
     def level_1(self):
         """
-        Level 1: Pac-man keep position fixed. Blue gost using BFS algorithms to chase Pacman.
+        Level 1: Pac-Man keeps a fixed position. Blue Ghost uses BFS to chase Pac-Man.
+        Records search time, memory usage, and number of expanded nodes.
         """
         graph_map, pacman_pos, monster_pos = Map.read_map_level_1_monster(
             MAP_INPUT_TXT[self.current_level - 1][self.current_map_index])
-        
 
-        # path = GraphSearchAStar.search(graph_map, pacman_pos, monster_pos)
-        path = BFS.bfs(graph_map, monster_pos, pacman_pos)
-
-
+        print("Pacman postition: ", pacman_pos)
+        print("Monster position: ", monster_pos)
         pacman = Pacman.Pacman(self, pacman_pos)
         pacman.appear()
 
         monster = Monster.Monster(self, monster_pos, "blue")
         monster.appear()
 
-        # food = Food.Food(self, monster_pos)
-        # food.appear()
+        # Start tracking performance
+        tracemalloc.start()
+        start_time = time.time()
 
+        path, expanded_nodes = BFS.bfs(graph_map, monster_pos, pacman_pos)
+        print("Path from monster to pacman: ", path)
+        end_time = time.time()
+        current_mem, peak_mem = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+
+        # Output performance metrics
+        print(f"[TEST RESULT]")
+        print(f"Ghost Start: {monster_pos}, Pac-Man: {pacman_pos}")
+        print(f"Search Time: {end_time - start_time:.6f} seconds")
+        print(f"Peak Memory Usage: {peak_mem / 1024:.2f} KB")
+        print(f"Expanded Nodes: {expanded_nodes}")
+        print("=" * 40)
+
+        # Execute ghost movement if a path was found
         if self.ready():
             if path is not None:
                 back_home = False
                 goal = path[-1]
-                path = path[1:-1]
+                path = path[1:-1]  # exclude start and goal for movement animation
 
                 for cell in path:
                     monster.move(cell)
                     self.update_score(SCORE_PENALTY)
                     pygame.time.delay(int(SPEED // self.speed_list[self.cur_speed_index][1]))
 
-                    if self.launch_game_event():
+                    if self.launch_game_event():  # if user clicks to stop/exit
                         back_home = True
                         break
 
@@ -122,6 +182,7 @@ class MyApp:
             else:
                 self.state = STATE_VICTORY
                 pygame.time.delay(2000)
+
     def level_2(self):
         """
         Level 2: Pac-man keep position fixed. Pink ghost using DFS algorithms to chase Pacman.

@@ -19,20 +19,25 @@ def bfs(graph, start, goal):
     frontier.put(node)
     visited[start] = V.FRONTIER
 
+    expanded_nodes = 0  # count how many nodes have been expanded
+
     while not frontier.empty():
         node = frontier.get()
+        expanded_nodes += 1  # count this as an expanded node
         explored.append((node[0], node[1]))
         visited[node[0]] = V.EXPLORED
 
         if node[0] == goal:
-            return get_path(explored)  # success
+            path = get_path(explored)
+            return path, expanded_nodes  # return both path and metric
 
         for child in graph[node[0]]:
             if visited[child] == V.NOT_VISITED:
                 frontier.put((child, node[0]))
                 visited[child] = V.FRONTIER
 
-    return None  # failure
+    return None, expanded_nodes  # failure, but return expanded count
+
 
 def get_path(explored):
     parent_table = dict()
