@@ -28,14 +28,14 @@ def astar(graph, start, goal):
         visited[node[0]] = V.EXPLORED
 
         if node[0] == goal:
-            return get_path(explored)
+            return get_path(explored), len(explored)
 
         for child in graph[node[0]]:
             if visited[child] == V.NOT_VISITED:
                 heapq.heappush(frontier, (g + 1 + heuristic(child, goal), g + 1, (child, node[0])))
                 visited[child] = V.FRONTIER
 
-    return None  # failure
+    return None, len(explored)
 
 def get_path(explored):
     parent_table = dict()

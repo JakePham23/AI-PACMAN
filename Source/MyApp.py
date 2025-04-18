@@ -277,13 +277,32 @@ class MyApp:
 
     def level_4(self):
         """
-        Level 4: Pac-man keep position fixed. Red ghost using A* algorithm to chase Pacman.
+        Level 4: Pac-man keeps position fixed. Red ghost uses A* algorithm to chase Pac-Man.
+        Records search time, memory usage, and number of expanded nodes.
         """
         graph_map, pacman_pos, monster_pos = Map.read_map_level_1_monster(
             MAP_INPUT_TXT[self.current_level - 1][self.current_map_index])
         
-        # Sử dụng thuật toán A*
-        path = AStar.astar(graph_map, monster_pos, pacman_pos)
+        # Start tracking performance
+        tracemalloc.start()
+        start_time = time.time()
+
+        path, expanded_nodes = AStar.astar(graph_map, monster_pos, pacman_pos)
+
+        end_time = time.time()
+        current_mem, peak_mem = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+
+        print("Pacman position:", pacman_pos)
+        print("Monster position:", monster_pos)
+
+        # Output performance metrics
+        print(f"[TEST RESULT]")
+        print(f"Ghost Start: {monster_pos}, Pac-Man: {pacman_pos}")
+        print(f"Search Time: {end_time - start_time:.6f} seconds")
+        print(f"Peak Memory Usage: {peak_mem / 1024:.2f} KB")
+        print(f"Expanded Nodes: {expanded_nodes}")
+        print("=" * 40)
 
         pacman = Pacman.Pacman(self, pacman_pos)
         pacman.appear()
