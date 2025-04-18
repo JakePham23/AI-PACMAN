@@ -473,7 +473,7 @@ class MyApp:
                             pacman.try_move('right', graph_map)
                 
                 # --- Ghost Blue dùng BFS ---
-                path_blue = BFS.bfs(graph_map, tuple(blue_monster.grid_pos), tuple(pacman.grid_pos))
+                path_blue, x = BFS.bfs(graph_map, tuple(blue_monster.grid_pos), tuple(pacman.grid_pos))
                 if path_blue is not None and len(path_blue) > 1:
                     blue_monster.move(path_blue[1])
                 
@@ -507,12 +507,12 @@ class MyApp:
                     pink_monster.move(next_step)
                 
                 # --- Ghost Orange dùng UCS ---
-                path_orange = UCS.ucs(graph_map, tuple(orange_monster.grid_pos), tuple(pacman.grid_pos))
+                path_orange, x = UCS.ucs(graph_map, tuple(orange_monster.grid_pos), tuple(pacman.grid_pos))
                 if path_orange is not None and len(path_orange) > 1:
                     orange_monster.move(path_orange[1])
                 
                 # --- Ghost Red dùng A* ---
-                path_red = AStar.astar(graph_map, tuple(red_monster.grid_pos), tuple(pacman.grid_pos))
+                path_red, x = AStar.astar(graph_map, tuple(red_monster.grid_pos), tuple(pacman.grid_pos))
                 if path_red is not None and len(path_red) > 1:
                     red_monster.move(path_red[1])
                 
