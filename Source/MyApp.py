@@ -78,52 +78,51 @@ class MyApp:
             self.level_5()
         elif self.current_level == 6:
             self.level_6()
+    
+    
+    def draw_monster_path(self, path, monster):
+        """
+        Vẽ đường đi của Monster đúng như logic monster di chuyển,
+        theo đúng hướng và vị trí trên bản đồ.
+        """
+        temp_monster_pos = monster.grid_pos[:]  # clone vị trí ban đầu
 
-    # def level_1(self):
-    #     """
-    #     Level 1: Pac-man keep position fixed. Blue gost using BFS algorithms to chase Pacman.
-    #     """
-    #     graph_map, pacman_pos, monster_pos = Map.read_map_level_1_monster(
-    #         MAP_INPUT_TXT[self.current_level - 1][self.current_map_index])
-        
+        for next_pos in path[1:]:  # Bỏ vị trí đầu
+            direction = self.get_direction(temp_monster_pos, next_pos)
+            pixel_pos = self.get_pixel_pos(next_pos)
 
-    #     # path = GraphSearchAStar.search(graph_map, pacman_pos, monster_pos)
-    #     path = BFS.bfs(graph_map, monster_pos, pacman_pos)
+            # Tùy theo hướng đi, vẽ mũi tên hoặc hình đại diện cho hướng
+            color = (0, 191, 255)  # Light blue
+            padding = 8
+            pygame.draw.rect(
+                self.screen,
+                color,
+                pygame.Rect(pixel_pos[0] + padding, pixel_pos[1] + padding,
+                            CELL_SIZE - 2 * padding, CELL_SIZE - 2 * padding),
+                border_radius=3
+            )
+            temp_monster_pos = next_pos
+            pygame.display.update()
+    
+    def get_direction(self, current, next_pos):
+        dx = next_pos[0] - current[0]
+        dy = next_pos[1] - current[1]
+        if dx == 1:
+            return 'right'
+        elif dx == -1:
+            return 'left'
+        elif dy == 1:
+            return 'down'
+        elif dy == -1:
+            return 'up'
+        return None
 
+    def get_pixel_pos(self, grid_pos):
+        x = grid_pos[0] * CELL_SIZE + MAP_POS_X
+        y = grid_pos[1] * CELL_SIZE + MAP_POS_Y
+        return [x, y]
 
-    #     pacman = Pacman.Pacman(self, pacman_pos)
-    #     pacman.appear()
-
-    #     monster = Monster.Monster(self, monster_pos, "blue")
-    #     monster.appear()
-
-    #     # food = Food.Food(self, monster_pos)
-    #     # food.appear()
-
-    #     start_time = time.time()
-    #     if self.ready():
-    #         if path is not None:
-    #             back_home = False
-    #             goal = path[-1]
-    #             path = path[1:-1]
-
-    #             for cell in path:
-    #                 monster.move(cell)
-    #                 self.update_score(SCORE_PENALTY)
-    #                 pygame.time.delay(int(SPEED // self.speed_list[self.cur_speed_index][1]))
-
-    #                 if self.launch_game_event():
-    #                     back_home = True
-    #                     break
-
-    #             if not back_home:
-    #                 monster.move(goal)
-    #                 self.update_score(SCORE_PENALTY + SCORE_BONUS)
-    #                 self.state = STATE_GAMEOVER
-    #                 pygame.time.delay(2000)
-    #         else:
-    #             self.state = STATE_VICTORY
-    #             pygame.time.delay(2000)
+    
     def level_1(self):
         """
         Level 1: Pac-Man keeps a fixed position. Blue Ghost uses BFS to chase Pac-Man.
@@ -146,6 +145,10 @@ class MyApp:
 
         path, expanded_nodes = BFS.bfs(graph_map, monster_pos, pacman_pos)
         print("Path from monster to pacman: ", path)
+
+        if path:
+            self.draw_monster_path(path, monster)
+
         end_time = time.time()
         current_mem, peak_mem = tracemalloc.get_traced_memory()
         tracemalloc.stop()
@@ -157,6 +160,8 @@ class MyApp:
         print(f"Peak Memory Usage: {peak_mem / 1024:.2f} KB")
         print(f"Expanded Nodes: {expanded_nodes}")
         print("=" * 40)
+
+
 
         # Execute ghost movement if a path was found
         if self.ready():
@@ -209,6 +214,7 @@ class MyApp:
                 path = path[1:-1]
 
                 for cell in path:
+                    
                     monster.move(cell)
                     self.update_score(SCORE_PENALTY)
                     pygame.time.delay(int(SPEED // self.speed_list[self.cur_speed_index][1]))
@@ -803,11 +809,11 @@ class MyApp:
         self.screen.blit(text_surf, (240, 100))
         text_surf, text_rect = self.font.render("22120230 - Pham Tan Nghia", TOMATO)
         self.screen.blit(text_surf, (150, 150))
-        text_surf, text_rect = self.font.render("22120xxx - Nguyen Van A", TOMATO)
+        text_surf, text_rect = self.font.render("22120272 - Ha Gia Phuc", TOMATO)
         self.screen.blit(text_surf, (150, 200))
-        text_surf, text_rect = self.font.render("22120xxx - Nguyen Van B", TOMATO)
+        text_surf, text_rect = self.font.render("22120302 - Dang Quy", TOMATO)
         self.screen.blit(text_surf, (150, 250))
-        text_surf, text_rect = self.font.render("22120xxx - Nguyen Van C", TOMATO)
+        text_surf, text_rect = self.font.render("22120318 - Tran Huu Tai", TOMATO)
         self.screen.blit(text_surf, (150, 300))
 
     def level_draw(self):
