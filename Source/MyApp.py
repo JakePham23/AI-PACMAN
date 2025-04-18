@@ -239,15 +239,37 @@ class MyApp:
         graph_map, pacman_pos, monster_pos = Map.read_map_level_1_monster(
             MAP_INPUT_TXT[self.current_level - 1][self.current_map_index])
         
-        # path = GraphSearchAStar.search(graph_map, pacman_pos, monster_pos)
-        path = UCS.ucs(graph_map, monster_pos, pacman_pos)
+        # Start tracking performance
+        tracemalloc.start()
+        start_time = time.time()
+        
+        path, expanded_nodes = UCS.ucs(graph_map, monster_pos, pacman_pos)
 
+        end_time = time.time()
+        current_mem, peak_mem = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+
+        print("Pacman position:", pacman_pos)
+        print("Monster position:", monster_pos)
+
+        # Output performance metrics
+        print(f"[TEST RESULT]")
+        print(f"Ghost Start: {monster_pos}, Pac-Man: {pacman_pos}")
+        print(f"Search Time: {end_time - start_time:.6f} seconds")
+        print(f"Peak Memory Usage: {peak_mem / 1024:.2f} KB")
+        print(f"Expanded Nodes: {expanded_nodes}")
+        print("=" * 40)
+
+
+        
         pacman = Pacman.Pacman(self, pacman_pos)
         pacman.appear()
 
         monster = Monster.Monster(self, monster_pos, "orange")
         monster.appear()
 
+        if path:
+            self.draw_monster_path(path, monster)
         # food = Food.Food(self, monster_pos)
         # food.appear()
 
@@ -346,10 +368,10 @@ class MyApp:
         print("Number of levels in MAP_INPUT_TXT:", len(MAP_INPUT_TXT))
         print("Number of maps in current level:", len(MAP_INPUT_TXT[self.current_level - 1]))
         # path = GraphSearchAStar.search(graph_map, pacman_pos, monster_pos)
-        path_blue = BFS.bfs(graph_map, monster_pos_blue, pacman_pos)
-        path_orange = UCS.ucs(graph_map, monster_pos_orange, pacman_pos)
+        path_blue, x = BFS.bfs(graph_map, monster_pos_blue, pacman_pos)
+        path_orange, x = UCS.ucs(graph_map, monster_pos_orange, pacman_pos)
         path_pink = DFS.dfs(graph_map, monster_pos_pink, pacman_pos)
-        path_red = AStar.astar(graph_map, monster_pos_red, pacman_pos)
+        path_red, x = AStar.astar(graph_map, monster_pos_red, pacman_pos)
         
         pacman = Pacman.Pacman(self, pacman_pos)
         pacman.appear()

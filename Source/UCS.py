@@ -38,7 +38,7 @@ def ucs(graph, start, goal):
         visited[state] = V.EXPLORED
         
         if state == goal:
-            return get_path(explored)  # success
+            return get_path(explored), len(explored)
         
         for child in graph[state]:
             # Tính chi phí mới
@@ -52,7 +52,7 @@ def ucs(graph, start, goal):
                 frontier.put((new_cost, (child, state, new_cost)))
                 visited[child] = V.FRONTIER
     
-    return None  # failure
+    return None, len(explored)
 
 def get_path(explored):
     parent_table = dict()
