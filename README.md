@@ -16,5 +16,5 @@
 1. **Chạy dự án:**
    ```bash
    
-   cd source
+   cd Source
    python3 main.py
