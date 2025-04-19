@@ -1,6 +1,20 @@
-- Course: Artificial Intelligence - HCMUS  
-- Contributors:
-  * [22120230 - Phạm Tấn Nghĩa](https://github.com/JakePham23)
-  * [22120302 - Đặng Quý](https://github.com/QuyDang1108)
+# Hướng dẫn chạy ứng dụng Python
 
-<h1 align='center'>PROJECT 1 - SEARCH (PACMAN)</h1>
+## Mô tả
+Đây là một ứng dụng Python đơn giản. Để chạy ứng dụng, bạn cần di chuyển vào thư mục `source` và thực thi tập tin `main.py`.
+
+## Yêu cầu hệ thống
+- Python 3.6 trở lên
+- Các thư viện được liệt kê trong `requirements.txt` (nếu có)
+
+## 🛠 Các thư viện sử dụng
+- `pygame`: Thư viện hỗ trợ phát triển trò chơi hoặc ứng dụng đa phương tiện trên Python.
+
+
+## Cài đặt
+
+1. **Chạy dự án:**
+   ```bash
+   
+   cd source
+   python3 main.py
